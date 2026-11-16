@@ -1,0 +1,19 @@
+# Виртуальное окружение
+.venv/
+
+# Служебные файлы ОС
+.DS_Store
+Thumbs.db
+
+# Кэш Python
+__pycache__/
+*.pyc
+
+# Сборка
+build/
+dist/
+*.egg-info/
+
+# IDE
+.idea/
+.vscode/
