@@ -1,5 +1,5 @@
 from settings import *
-from support import Timer
+from support import Timer,folder_importer,load_json
 
 class Sprite(pygame.sprite.Sprite):
     def __init__(self, groups, pos, surf, ground=False):
@@ -102,4 +102,23 @@ class Player(Sprite):
         self.image = frames[int(self.frame_index) % len(frames)]
         self.rect = self.image.get_frect(center=self.rect.center)
         self.state = state
-        
+class Animated_sprite(Sprite):
+    def __init__(self,groups,pos,frames,animation_speed=6):
+        self.frames = frames
+        self.frame_index = 0
+        self.animation_speed = animation_speed
+        first = self.frames[str(int(self.frame_index))]
+        super().__init__(groups,pos,first)
+    def update(self, dt):
+        # группа All_sprites вызывает update у каждого спрайта каждый кадр
+        self.animate(dt)
+    def animate(self, dt):
+        self.frame_index += self.animation_speed * dt
+        key = str(int(self.frame_index) % len(self.frames))
+        self.original_image = self.frames[key]
+        # кадры врагов нарисованы влево, вправо их зеркалим
+        if hasattr(self, 'direction') and self.direction.x > 0:
+            self.image = pygame.transform.flip(self.original_image, True, False)
+        else:
+            self.image = self.original_image
+

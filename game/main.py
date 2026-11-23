@@ -20,6 +20,11 @@ class Game():
             self.collision_rects,
             self.map_bounds,
         )
+        # анимированные монстры на карте (класс Animated_sprite)
+        self.monster_frames = self.load_monster_frames()
+        monster_positions = [(1150, 950), (1420, 1180), (1550, 1000)]
+        for pos in monster_positions:
+            Animated_sprite(self.all_sprites, pos, self.monster_frames)
 
     def setup_map(self, map_name):
         tmx = load_pygame(data('maps', map_name), pixelalpha=True)
@@ -75,6 +80,17 @@ class Game():
             player_frames[direction] = frames
         return player_frames
 
+    def load_monster_frames(self):
+        # кадры монстра лежат в одной папке: 0.png, 1.png, ...
+        folder = folder_importer(asset('images', 'enemies', 'normal'))
+        frames = {}
+        for name, surf in folder.items():
+            frames[name] = pygame.transform.scale(
+                surf,
+                (surf.get_width() * 2, surf.get_height() * 2),
+            )
+        return frames
+
     def run(self):
         while self.running:
             dt = self.clock.tick(FPS) / 1000
@@ -91,4 +107,4 @@ class Game():
 if __name__ == '__main__':
     game = Game()
     game.run()
-#дз зарегаться на гит хабе и выложить репозиторий
+#дз закомитить изменения
